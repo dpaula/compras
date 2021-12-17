@@ -48,7 +48,7 @@ spring:
       uri: mongodb://fplimacosmosdb:XpKAW9SVjjKJ7WndCqaIsIPLh1ZmjpjO20t2DNmQIrr5nXv9Ee4kntfOIeKJkdD8zg7VHWySytf7RD7Mb2FhPw==@fplimacosmosdb.mongo.cosmos.azure.com:10255/?ssl=true&replicaSet=globaldb&retrywrites=false&maxIdleTimeMS=120000&appName=@fplimacosmosdb@
 
 estoque:
-  url: http://localhost:2590
+  url: https://email-foi.azurewebsites.net/
 
 logging:
   pattern:
