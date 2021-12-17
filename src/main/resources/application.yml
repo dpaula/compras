@@ -1,0 +1,79 @@
+server:
+  port: 2580
+  servlet:
+    context-path: /
+  undertow:
+    accesslog:
+      prefix: "[COMPRAS-API]"
+
+spring:
+  main:
+    banner-mode: 'off'
+  output:
+    ansi:
+      enabled: 'always'
+  application:
+    name: 'compras-api'
+
+  cloud:
+    azure:
+      servicebus:
+        connection-string: Endpoint=sb://fplima.servicebus.windows.net/;SharedAccessKeyName=RootManageSharedAccessKey;SharedAccessKey=nlV4hI8vwnEvaQwam0yTBIWZt4iVUC5Cv99wUfxzEVU=
+      subscription-id: sb-compra-email
+    stream:
+      bindings:
+        consume-in-0:
+          destination: compra-topico
+          group: sb-compra-email
+        supply-out-0:
+          destination: compra-topico
+          producer:
+            requiredGroups: sb-compra-email
+        servicebus:
+          topic:
+            bindings:
+              consume-in-0:
+                consumer:
+                  checkpoint-mode: MANUAL
+        function:
+          definition: consume;supply;
+        poller:
+          fixed-delay: 1000
+          initial-delay: 0
+
+
+  data:
+    mongodb:
+      database: compras_db
+      uri: mongodb://fplimacosmosdb:XpKAW9SVjjKJ7WndCqaIsIPLh1ZmjpjO20t2DNmQIrr5nXv9Ee4kntfOIeKJkdD8zg7VHWySytf7RD7Mb2FhPw==@fplimacosmosdb.mongo.cosmos.azure.com:10255/?ssl=true&replicaSet=globaldb&retrywrites=false&maxIdleTimeMS=120000&appName=@fplimacosmosdb@
+
+estoque:
+  url: http://localhost:2590
+
+logging:
+  pattern:
+    console: '%d{yyyy-MM-dd HH:mm:ss.SSS} %-5level %logger{1}: %msg%n'
+  level:
+    root: INFO
+    com.dpaula: DEBUG
+
+#ACTUATOR
+management:
+  endpoint:
+    health:
+      show-details: always
+    metrics:
+      enabled: false
+  endpoints:
+    web:
+      exposure:
+        include: "*"
+
+info:
+  app:
+    name: '@project.name@'
+    description: '@project.description@'
+    version: '@project.version@'
+    encoding: '@project.build.sourceEncoding@'
+    java:
+      version: '@java.version@'
